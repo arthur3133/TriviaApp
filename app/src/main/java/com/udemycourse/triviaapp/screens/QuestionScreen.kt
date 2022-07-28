@@ -1,16 +1,16 @@
 package com.udemycourse.triviaapp.screens
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.udemycourse.triviaapp.ui.theme.mDarkPurple
 import com.udemycourse.triviaapp.ui.theme.mLightGray
+import com.udemycourse.triviaapp.ui.theme.mLightPurple
 import com.udemycourse.triviaapp.ui.theme.mOffWhite
 import com.udemycourse.triviaapp.viewmodel.QuestionViewModel
 
@@ -45,6 +46,7 @@ fun QuestionScreen(questionViewModel: QuestionViewModel) {
 @Preview
 @Composable
 fun QuestionDisplay() {
+    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 10f), 0f)
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = mDarkPurple
@@ -55,6 +57,8 @@ fun QuestionDisplay() {
             horizontalAlignment = Alignment.Start
         ) {
             QuestionTracker()
+            Spacer(modifier = Modifier.height(12.dp))
+            DrawDottedLine(pathEffect = pathEffect)
         }
     }
 }
@@ -77,4 +81,18 @@ fun QuestionTracker(counter: Int = 10, totalQuestion: Int = 100) {
             }
         }
     })
+}
+
+@Composable
+fun DrawDottedLine(pathEffect: PathEffect) {
+    Canvas(modifier = Modifier
+        .fillMaxWidth()
+        .height(1.dp)) {
+        drawLine(
+            color = mLightGray,
+            start = Offset(x = 0f, y = 0f),
+            end = Offset(x = size.width, y = 0f),
+            pathEffect = pathEffect
+        )
+    }
 }
