@@ -2,6 +2,7 @@ package com.udemycourse.triviaapp.di
 
 import com.udemycourse.triviaapp.constants.Constants.BASE_URL
 import com.udemycourse.triviaapp.network.TriviaApiService
+import com.udemycourse.triviaapp.repository.QuestionRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,4 +25,9 @@ object AppModule {
             .build()
             .create(TriviaApiService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun providesQuestionRepository(apiService: TriviaApiService) = QuestionRepository(apiService
+    )
 }
