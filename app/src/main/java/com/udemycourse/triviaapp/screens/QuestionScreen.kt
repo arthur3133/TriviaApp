@@ -14,17 +14,14 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.res.fontResource
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextIndent
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.udemycourse.triviaapp.model.QuestionItem
 import com.udemycourse.triviaapp.ui.theme.*
 import com.udemycourse.triviaapp.viewmodel.QuestionViewModel
@@ -96,6 +93,8 @@ fun QuestionDisplay(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
+            if (questionIndex.value >= 3)
+                ShowProgress(score = questionIndex.value)
             QuestionTracker(counter = questionIndex.value, totalQuestion = questionViewModel.data.value.data?.size)
             Spacer(modifier = Modifier.height(12.dp))
             DrawDottedLine(pathEffect = pathEffect)
@@ -223,5 +222,50 @@ fun DrawDottedLine(pathEffect: PathEffect) {
             end = Offset(x = size.width, y = 0f),
             pathEffect = pathEffect
         )
+    }
+}
+
+@Composable
+fun ShowProgress(score: Int) {
+    val gradient = Brush.linearGradient(listOf(Color(0xFFF95076), Color(0xFFBE6BE5)))
+    val progressState by remember(score) {
+        mutableStateOf(score*0.005f)
+    }
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(45.dp)
+            .padding(3.dp)
+            .border(
+                width = 4.dp,
+                brush = Brush.linearGradient(colors = listOf(mLightPurple, mLightPurple)),
+                shape = RoundedCornerShape(34.dp)
+            )
+            .clip(
+                RoundedCornerShape(
+                    topStartPercent = 50,
+                    topEndPercent = 50,
+                    bottomStartPercent = 50,
+                    bottomEndPercent = 50
+                )
+            )
+            .background(Color.Transparent),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Button(
+            onClick = { },
+            contentPadding = PaddingValues(1.dp),
+            modifier = Modifier
+                .fillMaxWidth(progressState)
+                .background(brush = gradient),
+            enabled = false,
+            elevation = null,
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color.Transparent,
+                disabledBackgroundColor = Color.Transparent
+            )
+        ) {
+
+        }
     }
 }
