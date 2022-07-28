@@ -21,11 +21,15 @@ class QuestionViewModel @Inject constructor(private val repository: QuestionRepo
         getAllQuestions()
     }
     private fun getAllQuestions() {
+        data.value.loading = true
         viewModelScope.launch(Dispatchers.IO) {
-            data.value.loading = true
-            data.value = repository.getAllQuestions()
-            if (data.value.data.toString().isNotEmpty())
-                data.value.loading = false
+            try {
+                data.value = repository.getAllQuestions()
+                if (data.value.data.toString().isNotEmpty())
+                    data.value.loading = false
+            } catch (e: Exception) {
+                data.value.e = e
+            }
         }
     }
 }
